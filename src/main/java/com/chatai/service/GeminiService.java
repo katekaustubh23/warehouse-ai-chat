@@ -1,8 +1,10 @@
-package com.chatai.Service;
+package com.chatai.service;
 
 import com.chatai.config.PropertiesConfig;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,7 +15,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GeminiService {
 
-    private PropertiesConfig propertiesConfig;
+    private final static Logger logger = LoggerFactory.getLogger(GeminiService.class);
+    private final PropertiesConfig propertiesConfig;
     private final WebClient webClient;
 
     public String askAI(String message) {
