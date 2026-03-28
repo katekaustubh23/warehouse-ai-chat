@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,6 +21,11 @@ public class GeminiService {
     private final PropertiesConfig propertiesConfig;
     private final WebClient webClient;
 
+    @Retryable(
+            value={Exception.class},
+            maxAttempts = 2,
+            backoff = @Backoff(3000)
+    )
     public String askAI(String message) {
 
         String prompt = """
@@ -33,6 +40,7 @@ public class GeminiService {
         }
 
         Only return JSON. No explanation.
+        if not found any JSON related data please response one line statement in text
         User: %s
                 """.formatted(message);
         
@@ -41,9 +49,12 @@ public class GeminiService {
                                 Map.of("parts", List.of(Map.of("text", prompt)))
                         )
                 );
-        
+
+                logger.info(">>> print the request body {}", request);
                 return webClient.post()
-                        .uri(propertiesConfig.getAiApi() + "?key=" + propertiesConfig.getApiKey())
+                        .uri(propertiesConfig.getAiApi())
+                        .header("Content-Type", "application/json")
+                        .header("X-goog-api-key", propertiesConfig.getApiKey())
                         .bodyValue(request)
                         .retrieve()
                         .bodyToMono(String.class)
