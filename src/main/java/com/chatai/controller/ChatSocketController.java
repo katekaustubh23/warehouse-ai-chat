@@ -22,7 +22,7 @@ public class ChatSocketController {
         System.out.println("Received message from user: " + message.getUserId());
 
         String reply = "Server received: " + message.getMessage();
-
+        System.out.println("sending message: " + message.getMessage());
         return new ChatResponse(message.getUserId(), reply);
     }
 }
