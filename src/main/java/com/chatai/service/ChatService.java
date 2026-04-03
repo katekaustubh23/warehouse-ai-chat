@@ -35,9 +35,7 @@ public class ChatService {
 
             String result = executionAction(response, userId);
             return result;
-
         } catch (Exception e) {
-
             return json;
         }
 
