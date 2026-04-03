@@ -30,7 +30,6 @@ public class GeminiService {
 
         String prompt = """
         You are an e-commerce assistant.
-
         Convert user input into STRICT JSON:
 
         {
@@ -40,7 +39,8 @@ public class GeminiService {
         }
 
         Only return JSON. No explanation.
-        if not found any JSON related data please response one line statement in text
+        if not found any JSON related data please response one line statement in text, such as chatting with the person,
+        so user can agree to place order.(one line statement like chatting)
         User: %s
                 """.formatted(message);
         
