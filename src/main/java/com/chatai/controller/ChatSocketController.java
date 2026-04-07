@@ -16,13 +16,13 @@ public class ChatSocketController {
      * Client subscribes → /topic/reply
      * */
     @MessageMapping("/message")
-    @SendTo("/topic/replay")
-    public ChatResponse processMessage(ChatRequest message) {
+    @SendTo("/topic/message")
+    public ChatResponse processMessage(ChatRequest message) throws InterruptedException {
 
         System.out.println("Received message from user: " + message.getUserId());
-
+        Thread.sleep(5000);
         String reply = "Server received: " + message.getMessage();
-        System.out.println("sending message: " + message.getMessage());
+        System.out.println("sending message: " + reply);
         return new ChatResponse(message.getUserId(), reply);
     }
 }
